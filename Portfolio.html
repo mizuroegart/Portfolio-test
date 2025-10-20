@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mizuro | Портфолио Разработчика</title>
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <!-- Load Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Load Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Load AOS (Optional, for fallback animations) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <style>
+        /*
+        ===================================================================
+        CUSTOM CSS VARIABLES & BASE STYLES
+        ===================================================================
+        */
+        :root {
+            /* Dark Mode Variables (Default) */
+            --bg-primary: #0a0a0a;          /* Deep Black/Gray */
+            --bg-secondary: #1a1a1a;        /* Card background */
+            --text-primary: #f8f8f8;        /* White text */
+            --text-secondary: #a0a0a0;      /* Gray text */
+            --accent-main: #6C63FF;         /* Purple accent */
+            --accent-dark: #4A44C6;         /* Darker purple */
+            --border-color: #262626;        /* Border color */
+            --shadow-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* Light Mode Variables */
+        html.light {
+            --bg-primary: #f0f4f8;          /* Light Blue/Gray */
+            --bg-secondary: #ffffff;        /* White card */
+            --text-primary: #1f2937;        /* Dark Blue text */
+            --text-secondary: #6b7280;      /* Medium Gray text */
+            --accent-main: #6C63FF;         /* Purple accent */
+            --accent-dark: #4A44C6;         /* Darker purple */
+            --border-color: #e5e7eb;        /* Light border color */
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Utility Classes based on variables */
+        .bg-primary-custom { background-color: var(--bg-primary); }
+        .bg-secondary-custom { background-color: var(--bg-secondary); transition: background-color 0.5s ease; }
+        .text-primary-custom { color: var(--text-primary); }
+        .text-secondary-custom { color: var(--text-secondary); }
+        .text-accent-custom { color: var(--accent-main); }
+        .border-custom { border-color: var(--border-color); }
+        .shadow-custom { box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color); }
+
+        /* Custom Header Styling for Glassmorphism Effect */
+        .header-glass {
+            background-color: var(--bg-primary); /* Fallback */
+            background-color: var(--header-bg); /* Use variable for backdrop */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--accent-dark); border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent-main); }
+
+        /* Keyframe for button hover pulse */
+        @keyframes pulse-accent {
+            0%, 100% {
+                box-shadow: 0 0 0 0 var(--accent-main);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(108, 99, 255, 0);
+            }
+        }
+        .btn-pulse:hover {
+            animation: pulse-accent 1s infinite;
+        }
+
+        /*
+        ===================================================================
+        HERO SECTION CANVAS & PARALLAX
+        ===================================================================
+        */
+        .hero-bg-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.8;
+            transition: opacity 0.5s ease;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        /*
+        ===================================================================
+        TIMELINE STYLES
+        ===================================================================
+        */
+        .timeline-container {
+            position: relative;
+        }
+
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--accent-main), var(--bg-secondary));
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            z-index: 1;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            margin-bottom: 20px;
+        }
+
+        .timeline-item.right {
+            left: 50%;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            right: -13px;
+            background-color: var(--bg-secondary);
+            border: 4px solid var(--accent-main);
+            top: 15px;
+            border-radius: 50%;
+            z-index: 2;
+            transition: background-color 0.5s ease;
+        }
+
+        .timeline-item.right::after {
+            left: -12px;
+        }
+
+        .timeline-item.active::after {
+            background-color: var(--accent-main);
+            box-shadow: 0 0 0 5px var(--bg-primary);
+        }
+
+        /* Responsive timeline */
+        @media screen and (max-width: 768px) {
+            .timeline-container::after {
+                left: 31px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+
+            .timeline-item.right {
+                left: 0%;
+            }
+
+            .timeline-item.right::after {
+                left: 20px;
+            }
+
+            .timeline-item::after {
+                left: 20px;
+                right: auto;
+            }
+        }
+
+        /* Custom button styles for projects */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--accent-main);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
+        }
+
+        .btn:hover {
+            background: var(--accent-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent-main);
+            color: var(--accent-main);
+        }
+
+        .btn-outline:hover {
+            background: var(--accent-main);
+            color: white;
+        }
+
+        /* Project tech tags */
+        .tech-tag {
+            background: rgba(108, 99, 255, 0.2);
+            color: var(--accent-main);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Project cards - removed hover animations */
+        .project-card {
+            background-color: var(--bg-secondary);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            transition: none; /* Remove transition effects */
+        }
+
+        .project-card:hover {
+            transform: none; /* Remove transform on hover */
+            box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -2px var(--shadow-color); /* Keep original shadow */
+        }
+
+        /* Loading screen styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border-color);
+            border-top: 3px solid var(--accent-main);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Certificate hover effects */
+        .certificate-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .certificate-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+
+        /* Project filter animations */
+        .project-card {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Form validation styles */
+        input.valid, textarea.valid {
+            border-color: #10B981 !important;
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" class="fixed bottom-6 right-6 p-4 bg-accent-main text-gray-900 rounded-full shadow-lg hover:bg-purple-400 transition-all duration-300 z-50 opacity-0 transform translate-y-4 btn-pulse" aria-label="Наверх">
+        <i data-lucide="arrow-up" class="w-6 h-6"></i>
+    </button>
+
+    <!-- Header / Navigation (Sticky and Glassmorphic) -->
+    <header id="main-header" class="sticky top-0 z-40 header-glass border-b border-custom">
+        <nav class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#hero" class="text-3xl font-extrabold tracking-widest text-primary-custom">    <span class="text-accent-custom">Portfolio</span></a>
+            
+            <!-- Navigation Links -->
+            <div id="nav-links" class="hidden md:flex space-x-8 text-sm font-semibold">
+                <a href="#about" class="nav-link hover:text-accent-main transition text-secondary-custom" data-section="about">Обо мне</a>
+                <a href="#timeline" class="nav-link hover:text-accent-main transition text-secondary-custom" data-section="timeline">Опыт</a>
+                <a href="#skills" class="nav-link hover:text-accent-main transition text-secondary-custom" data-section="skills">Стек</a>
+                <a href="#certificates" class="nav-link hover:text-accent-main transition text-secondary-custom" data-section="certificates">Сертификаты</a>
+                <a href="#projects" class="nav-link hover:text-accent-main transition text-secondary-custom" data-section="projects">Проекты</a>
+                <a href="#testimonials" class="nav-link hover:text-accent-main transition text-secondary-custom" data-section="testimonials">Отзывы</a>
+                <a href="#stats" class="nav-link hover:text-accent-main transition text-secondary-custom" data-section="stats">Статистика</a>
+                <a href="#contacts" class="nav-link hover:text-accent-main transition text-secondary-custom" data-section="contacts">Контакты</a>
+            </div>
+            
+            <!-- Mobile Menu Toggle (Simplified for single-file) -->
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" class="p-2 rounded-full text-accent-main hover:bg-gray-800 light:hover:bg-gray-200 transition" aria-label="Переключить тему">
+                    <i data-lucide="sun" class="w-6 h-6 block dark-icon"></i>
+                    <i data-lucide="moon" class="w-6 h-6 hidden light-icon"></i>
+                </button>
+                <button id="mobile-menu-button" class="md:hidden p-2 rounded-full text-accent-main hover:bg-gray-800 light:hover:bg-gray-200 transition">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Mobile Navigation Drawer (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-primary-custom shadow-xl border-t border-custom">
+            <a href="#about" class="block px-4 py-3 text-sm font-semibold hover:bg-secondary-custom border-b border-custom">Обо мне</a>
+            <a href="#timeline" class="block px-4 py-3 text-sm font-semibold hover:bg-secondary-custom border-b border-custom">Опыт</a>
+            <a href="#skills" class="block px-4 py-3 text-sm font-semibold hover:bg-secondary-custom border-b border-custom">Стек</a>
+            <a href="#certificates" class="block px-4 py-3 text-sm font-semibold hover:bg-secondary-custom border-b border-custom">Сертификаты</a>
+            <a href="#projects" class="block px-4 py-3 text-sm font-semibold hover:bg-secondary-custom border-b border-custom">Проекты</a>
+            <a href="#testimonials" class="block px-4 py-3 text-sm font-semibold hover:bg-secondary-custom border-b border-custom">Отзывы</a>
+            <a href="#stats" class="block px-4 py-3 text-sm font-semibold hover:bg-secondary-custom border-b border-custom">Статистика</a>
+            <a href="#contacts" class="block px-4 py-3 text-sm font-semibold hover:bg-secondary-custom">Контакты</a>
+        </div>
+    </header>
+
+    <main>
+        
+        <!-- 1. Hero Section (Parallax and Canvas Background) -->
+        <section id="hero" class="relative min-h-screen flex items-center pt-20 overflow-hidden bg-primary-custom">
+            <canvas id="hero-bg-canvas" class="hero-bg-canvas"></canvas>
+            <div class="container mx-auto px-4 hero-content text-center md:text-left py-24">
+                <p data-reveal class="text-lg uppercase tracking-widest text-accent-main font-semibold mb-3 transform translate-y-8 opacity-0 transition-all duration-1000 ease-out">
+                    Веб-разработчик
+                </p>
+                <h1 data-reveal data-delay="100" class="text-7xl md:text-9xl font-extrabold text-primary-custom leading-none mb-6">
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-purple-600 light:from-purple-700 light:to-purple-900">Mizuro</span>
+                    <span class="block mt-4 md:inline-block">aka</span>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-purple-600 light:from-purple-700 light:to-purple-900">Mizuki</span>
+                </h1>
+                <p data-reveal data-delay="200" class="text-xl md:text-3xl text-secondary-custom max-w-4xl mx-auto md:mx-0 mb-12">
+                    Создаю быстрые, масштабируемые и интуитивно понятные веб-приложения, от концепции до продакшена.
+                </p>
+                
+                <div data-reveal data-delay="300" class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6 justify-center md:justify-start">
+                    <a href="#projects" class="inline-flex items-center justify-center px-10 py-4 text-xl font-bold border-2 border-accent-main text-accent-main rounded-full hover:bg-accent-main hover:text-gray-900 transition-all duration-300 transform hover:scale-105">
+                        <i data-lucide="layers" class="w-6 h-6 mr-3"></i>
+                        Мои Проекты
+                    </a>
+                    <a href="#contacts" class="inline-flex items-center justify-center px-10 py-4 text-xl font-bold border-2 border-accent-main text-accent-main rounded-full hover:bg-accent-main hover:text-gray-900 transition-all duration-300 transform hover:scale-105">
+                        <i data-lucide="mail" class="w-6 h-6 mr-3"></i>
+                        Связаться
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. About Section (Detailed Info & Philosophy) -->
+        <section id="about" class="py-24 md:py-32 bg-secondary-custom transition-colors duration-500 border-b border-custom">
+            <div class="container mx-auto px-4">
+                <h2 data-reveal class="text-5xl font-extrabold mb-16 text-center text-accent-custom border-b-4 border-accent-dark inline-block pb-2 transform translate-y-8 opacity-0">
+                    Обо мне
+                </h2>
+                
+                <div class="grid lg:grid-cols-3 gap-12 items-start">
+                    
+                    <div data-reveal data-delay="100" class="lg:col-span-2 space-y-8 text-lg text-secondary-custom transform translate-y-8 opacity-0">
+                        <p class="text-2xl font-semibold text-primary-custom">
+                            Привет! Я Mizuro, разработчик, сфокусированный на создании функциональных, красивых и оптимизированных решений.
+                        </p>
+                        <p>
+                            Моя страсть — соединять чистый код (HTML/CSS/JS) с элегантным дизайном (Figma). Я не просто кодирую макеты; я проектирую пользовательский опыт. За 2 года практики я научился быстро осваивать новые инструменты и принимать системные решения, которые экономят время и ресурсы в долгосрочной перспективе.
+                        </p>
+                        <p>
+                            В последнее время я активно работаю над проектами, требующими высокой адаптивности и взаимодействия с API. Будь то сложная админ-панель, Telegram-бот или высоконагруженный лендинг — я всегда ищу наиболее эффективный путь.
+                        </p>
+                        
+                        <!-- Core Values List -->
+                        <div class="grid md:grid-cols-2 gap-6 pt-4">
+                            <div class="flex items-start space-x-3">
+                                <i data-lucide="chevrons-right" class="w-6 h-6 text-accent-main flex-shrink-0 mt-1"></i>
+                                <div>
+                                    <h4 class="font-bold text-primary-custom">Чистый Код</h4>
+                                    <p class="text-sm text-secondary-custom">Поддерживаемая, документированная и масштабируемая архитектура.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i data-lucide="chevrons-right" class="w-6 h-6 text-accent-main flex-shrink-0 mt-1"></i>
+                                <div>
+                                    <h4 class="font-bold text-primary-custom">UX/UI Приоритет</h4>
+                                    <p class="text-sm text-secondary-custom">Фокус на интуитивности и удобстве для конечного пользователя.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i data-lucide="chevrons-right" class="w-6 h-6 text-accent-main flex-shrink-0 mt-1"></i>
+                                <div>
+                                    <h4 class="font-bold text-primary-custom">Адаптивность</h4>
+                                    <p class="text-sm text-secondary-custom">Pixel-perfect отображение на любом устройстве и разрешении.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-3">
+                                <i data-lucide="chevrons-right" class="w-6 h-6 text-accent-main flex-shrink-0 mt-1"></i>
+                                <div>
+                                    <h4 class="font-bold text-primary-custom">Соблюдение Дедлайнов</h4>
+                                    <p class="text-sm text-secondary-custom">Планирование и выполнение проектов точно в срок.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side Profile Card -->
+                    <div data-reveal data-delay="300" class="lg:col-span-1 p-6 bg-primary-custom rounded-3xl shadow-2xl border border-custom transform translate-y-8 opacity-0">
+                        <div class="flex flex-col items-center">
+                            <img src="https://placehold.co/150x150/0a0a0a/6C63FF?text=Mizuro" 
+                                 onerror="this.onerror=null; this.src='https://placehold.co/150x150/0a0a0a/6C63FF?text=Mizuro'"
+                                 alt="Профиль Mizuro" 
+                                 class="w-32 h-32 rounded-full border-4 border-accent-main mb-4 object-cover">
+                            
+                            <h3 class="text-2xl font-bold text-accent-main">Mizuki</h3>
+                            <p class="text-secondary-custom mb-4">Frontend Developer / Specialist</p>
+                            
+                            <div class="w-full text-left space-y-3">
+                                <div class="flex items-center text-sm">
+                                    <i data-lucide="briefcase" class="w-5 h-5 mr-3 text-purple-400"></i>
+                                    <span>2 года опыта</span>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <i data-lucide="map-pin" class="w-5 h-5 mr-3 text-purple-400"></i>
+                                    <span>Удаленно (Готовность к релокации)</span>
+                                </div>
+                                <div class="flex items-center text-sm">
+                                    <i data-lucide="mail" class="w-5 h-5 mr-3 text-purple-400"></i>
+                                    <a href="#contacts" class="hover:text-accent-main">Связаться со мной</a>
+                                </div>
+                            </div>
+                            
+                            <a href="#contacts" class="mt-6 w-full text-center py-2 border border-accent-main text-accent-main rounded-xl hover:bg-accent-main hover:text-gray-900 transition">
+                                Обсудить задачу
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 3. Experience Timeline (New Highly Animated Section) -->
+        <section id="timeline" class="py-24 md:py-32 bg-primary-custom border-b border-custom">
+            <div class="container mx-auto px-4">
+                <h2 data-reveal class="text-5xl font-extrabold mb-16 text-center text-accent-custom border-b-4 border-accent-dark inline-block pb-2 transform translate-y-8 opacity-0">
+                    Опыт и Образование
+                </h2>
+                
+                <div class="timeline-container max-w-6xl mx-auto">
+                    
+                    <!-- Item 1: Senior Role -->
+                    <div class="timeline-item reveal-item">
+                        <div class="bg-secondary-custom p-6 rounded-xl shadow-lg border border-custom">
+                            <time class="text-sm font-semibold text-accent-main">2025-2026 - Планы.</time>
+                            <h3 class="text-2xl font-bold mt-1 text-primary-custom">Frontend Developer</h3>
+                            <p class="text-secondary-custom mb-3">Окончить 2 курс обучения.</p>
+                            <ul class="list-disc list-inside text-sm text-secondary-custom space-y-1">
+                                <li>Освоение React, Node.js</li>
+                                <li>Разработка и поддержка центральной админ-панели на чистом JS.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Item 2: Mid-Level Role (Right) -->
+                    <div class="timeline-item right reveal-item">
+                        <div class="bg-secondary-custom p-6 rounded-xl shadow-lg border border-custom">
+                            <time class="text-sm font-semibold text-accent-main">Май 2023 - Август 2024</time>
+                            <h3 class="text-2xl font-bold mt-1 text-primary-custom">Junior Web Developer</h3>
+                            <p class="text-secondary-custom mb-3">Окончил 1 курс обучения в IT STEP.</p>
+                            <ul class="list-disc list-inside text-sm text-secondary-custom space-y-1">
+                                <li>Интеграция сторонних API (рассылки).</li>
+                                <li>Оптимизация скорости загрузки.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Item 3: Education/Training -->
+                    <div class="timeline-item reveal-item">
+                        <div class="bg-secondary-custom p-6 rounded-xl shadow-lg border border-custom">
+                            <time class="text-sm font-semibold text-accent-main">2022 - 2023</time>
+                            <h3 class="text-2xl font-bold mt-1 text-primary-custom">Первые проекты, Веб-разработка</h3>
+                            <ul class="list-disc list-inside text-sm text-secondary-custom space-y-1">
+                                <li>Глубокое изучение JS, и основ FrontEnd-разработки.</li>
+                                <li>Создание первых 5 учебных проектов и клонов.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Item 4: Start of Path (Right) -->
+                    <div class="timeline-item right reveal-item">
+                        <div class="bg-secondary-custom p-6 rounded-xl shadow-lg border border-custom">
+                            <time class="text-sm font-semibold text-accent-main">Начало 2022</time>
+                            <h3 class="text-2xl font-bold mt-1 text-primary-custom">Обучение в IT STEP</h3>
+                            <ul class="list-disc list-inside text-sm text-secondary-custom space-y-1">
+                                <li>Освоение фундаментальных основ HTML/CSS.</li>
+                                <li>Начальное обучение работы с Python.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Skills Section -->
+        <section id="skills" class="py-24 md:py-32 bg-secondary-custom transition-colors duration-500 border-b border-custom">
+            <div class="container mx-auto px-4">
+                <h2 data-reveal class="text-5xl font-extrabold mb-16 text-center text-accent-custom border-b-4 border-accent-dark inline-block pb-2 transform translate-y-8 opacity-0">
+                    Мой Стек
+                </h2>
+                
+                <div class="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                    
+                    <!-- Frontend Stack -->
+                    <div data-reveal data-delay="100" class="bg-primary-custom p-8 rounded-2xl shadow-xl border border-custom transform translate-y-8 opacity-0">
+                        <i data-lucide="monitor-dot" class="w-10 h-10 text-blue-500 mb-4"></i>
+                        <h3 class="text-3xl font-bold text-primary-custom mb-4">Frontend</h3>
+                        <p class="text-secondary-custom mb-6">Основа любого интерфейса, который я создаю.</p>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">🛠️</span>
+                                <p class="text-primary-custom font-medium">HTML5 & CSS3 (SCSS)</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">⚡</span>
+                                <p class="text-primary-custom font-medium">Vanilla JavaScript (ES6+)</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">🎨</span>
+                                <p class="text-primary-custom font-medium">Tailwind CSS & BEM</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">📚</span>
+                                <p class="text-primary-custom font-medium">Basic React/Vue Knowledge</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Backend/Tools Stack -->
+                    <div data-reveal data-delay="200" class="bg-primary-custom p-8 rounded-2xl shadow-xl border border-custom transform translate-y-8 opacity-0">
+                        <i data-lucide="cpu" class="w-10 h-10 text-orange-500 mb-4"></i>
+                        <h3 class="text-3xl font-bold text-primary-custom mb-4">Tools & Backend</h3>
+                        <p class="text-secondary-custom mb-6">Инструменты для автоматизации и серверная логика.</p>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">⚙️</span>
+                                <p class="text-primary-custom font-medium">Node.js (Basic)</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">🗄️</span>
+                                <p class="text-primary-custom font-medium">SQL/NoSQL (Basic)</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">🔀</span>
+                                <p class="text-primary-custom font-medium">Git / GitHub / GitLab</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">☁️</span>
+                                <p class="text-primary-custom font-medium">Netlify / Vercel (Deployment)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Design/Soft Skills -->
+                    <div data-reveal data-delay="300" class="bg-primary-custom p-8 rounded-2xl shadow-xl border border-custom transform translate-y-8 opacity-0">
+                        <i data-lucide="pen-tool" class="w-10 h-10 text-pink-500 mb-4"></i>
+                        <h3 class="text-3xl font-bold text-primary-custom mb-4">Design & Soft</h3>
+                        <p class="text-secondary-custom mb-6">Ключевые навыки, делающие проекты успешными.</p>
+                        <div class="space-y-4">
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">🖼️</span>
+                                <p class="text-primary-custom font-medium">Figma (Макеты, Прототипы)</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">🧠</span>
+                                <p class="text-primary-custom font-medium">UX/UI Принципы</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">💡</span>
+                                <p class="text-primary-custom font-medium">Проактивность и Обучаемость</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xl">🤝</span>
+                                <p class="text-primary-custom font-medium">Командная работа и Коммуникация</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW: Certificates Section -->
+        <section id="certificates" class="py-24 md:py-32 bg-primary-custom border-b border-custom">
+            <div class="container mx-auto px-4">
+                <h2 data-reveal class="text-5xl font-extrabold mb-16 text-center text-accent-custom border-b-4 border-accent-dark inline-block pb-2 transform translate-y-8 opacity-0">
+                    Сертификаты
+                </h2>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div class="certificate-card bg-secondary-custom p-6 rounded-2xl shadow-xl border border-custom">
+                        <div class="text-center">
+                            <i data-lucide="award" class="w-12 h-12 text-accent-main mx-auto mb-4"></i>
+                            <h3 class="text-xl font-bold text-primary-custom mb-2">Frontend Development</h3>
+                            <p class="text-secondary-custom mb-4">FreeCodeCamp</p>
+                            <span class="text-sm text-accent-main">2023</span>
+                        </div>
+                    </div>
+                    
+                    <div class="certificate-card bg-secondary-custom p-6 rounded-2xl shadow-xl border border-custom">
+                        <div class="text-center">
+                            <i data-lucide="award" class="w-12 h-12 text-accent-main mx-auto mb-4"></i>
+                            <h3 class="text-xl font-bold text-primary-custom mb-2">JavaScript Advanced</h3>
+                            <p class="text-secondary-custom mb-4">Stepik</p>
+                            <span class="text-sm text-accent-main">2023</span>
+                        </div>
+                    </div>
+                    
+                    <div class="certificate-card bg-secondary-custom p-6 rounded-2xl shadow-xl border border-custom">
+                        <div class="text-center">
+                            <i data-lucide="award" class="w-12 h-12 text-accent-main mx-auto mb-4"></i>
+                            <h3 class="text-xl font-bold text-primary-custom mb-2">Responsive Web Design</h3>
+                            <p class="text-secondary-custom mb-4">HTML Academy</p>
+                            <span class="text-sm text-accent-main">2022</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. Projects Section (Fixed - No hover animations and working buttons) -->
+        <section id="projects" class="py-24 md:py-32 bg-secondary-custom border-b border-custom">
+            <div class="container mx-auto px-4">
+                <h2 data-reveal class="text-5xl font-extrabold mb-16 text-center text-accent-custom border-b-4 border-accent-dark inline-block pb-2 transform translate-y-8 opacity-0">
+                    Мои Проекты
+                </h2>
+                
+                <!-- Project Filters -->
+                <div data-reveal class="flex flex-wrap justify-center gap-4 mb-12 transform translate-y-8 opacity-0">
+                    <button class="filter-btn active px-6 py-2 rounded-full border border-accent-main text-accent-main hover:bg-accent-main hover:text-gray-900 transition" data-filter="all">
+                        Все проекты
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-accent-main text-accent-main hover:bg-accent-main hover:text-gray-900 transition" data-filter="frontend">
+                        Frontend
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-accent-main text-accent-main hover:bg-accent-main hover:text-gray-900 transition" data-filter="javascript">
+                        JavaScript
+                    </button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-accent-main text-accent-main hover:bg-accent-main hover:text-gray-900 transition" data-filter="responsive">
+                        Responsive
+                    </button>
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    
+                    <!-- Project Card 1: Marvel Universe -->
+                    <div class="project-card reveal-item" data-category="frontend javascript responsive">
+                        <div class="bg-primary-custom p-6 rounded-2xl shadow-custom border border-custom">
+                            <div class="project-img w-full h-48 rounded-xl mb-4 flex items-center justify-center" style="background: linear-gradient(45deg, #e44d26, #f16529);">
+                                <i class="fab fa-html5 text-white text-4xl"></i>
+                            </div>
+                            
+                            <h3 class="text-2xl font-bold text-primary-custom mb-2">Marvel Universe</h3>
+                            <p class="text-secondary-custom text-sm mb-4">Интерактивный сайт с информацией о персонажах Marvel Universe так же о фильмах.</p>
+                            
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag">HTML</span>
+                                <span class="tech-tag">CSS</span>
+                                <span class="tech-tag">JavaScript</span>
+                            </div>
+
+                            <div class="project-links flex gap-2">
+                                <a href="https://mizuroegart.github.io/Marvel/" class="btn" target="_blank">Посмотреть</a>
+                                <a href="https://github.com/mizuroegart/Marvel" class="btn btn-outline" target="_blank">GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Project Card 2: Avatar Generator -->
+                    <div class="project-card reveal-item" data-category="frontend javascript">
+                        <div class="bg-primary-custom p-6 rounded-2xl shadow-custom border border-custom">
+                            <div class="project-img w-full h-48 rounded-xl mb-4 flex items-center justify-center" style="background: linear-gradient(45deg, #6a11cb, #2575fc);">
+                                <i class="fas fa-user-astronaut text-white text-4xl"></i>
+                            </div>
+                            
+                            <h3 class="text-2xl font-bold text-primary-custom mb-2">Avatar Generator</h3>
+                            <p class="text-secondary-custom text-sm mb-4">Генератор аватаров с возможностью кастомизации и экспорта</p>
+                            
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag">HTML</span>
+                                <span class="tech-tag">CSS</span>
+                                <span class="tech-tag">JavaScript</span>
+                                <span class="tech-tag">Canvas API</span>
+                            </div>
+
+                            <div class="project-links flex gap-2">
+                                <a href="https://mizuroegart.github.io/Avatar/" class="btn" target="_blank">Посмотреть</a>
+                                <a href="https://github.com/mizuroegart/Avatar" class="btn btn-outline" target="_blank">GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project Card 3: Disign -->
+                    <div class="project-card reveal-item" data-category="frontend responsive">
+                        <div class="bg-primary-custom p-6 rounded-2xl shadow-custom border border-custom">
+                            <div class="project-img w-full h-48 rounded-xl mb-4 flex items-center justify-center" style="background: linear-gradient(45deg, #11998e, #38ef7d);">
+                                <i class="fas fa-jedi text-white text-4xl"></i>
+                            </div>
+                            
+                            <h3 class="text-2xl font-bold text-primary-custom mb-2">CreativeDesign</h3>
+                            <p class="text-secondary-custom text-sm mb-4">Тематический сайт по Дизайну с интерактивными элементами</p>
+                            
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="tech-tag">HTML</span>
+                                <span class="tech-tag">CSS</span>
+                                <span class="tech-tag">JavaScript</span>
+                            </div>
+
+                            <div class="project-links flex gap-2">
+                                <a href="https://mizuroegart.github.io/DesignSite/" class="btn" target="_blank">Посмотреть</a>
+                                <a href="https://github.com/mizuroegart/DesignSite" class="btn btn-outline" target="_blank">GitHub</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Testimonials Section (Simple Carousel/Grid) -->
+        <section id="testimonials" class="py-24 md:py-32 bg-primary-custom border-b border-custom">
+            <div class="container mx-auto px-4">
+                <h2 data-reveal class="text-5xl font-extrabold mb-16 text-center text-accent-custom border-b-4 border-accent-dark inline-block pb-2 transform translate-y-8 opacity-0">
+                    Отзывы Клиентов
+                </h2>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Testimonial 1 -->
+                    <div class="reveal-item" data-delay="0">
+                        <div class="bg-secondary-custom p-6 rounded-xl shadow-xl border border-custom">
+                            <i data-lucide="quote" class="w-8 h-8 text-accent-main mb-4"></i>
+                            <p class="text-secondary-custom italic mb-4">"Mizuro превзошел все ожидания. Его чистый JavaScript и внимание к деталям в адаптивной верстке — это то, что нужно. Проект был сдан вовремя."</p>
+                            <div class="flex items-center">
+                                <div class="font-bold text-primary-custom">Александр К.</div>
+                                <div class="text-sm text-secondary-custom ml-2">- Product Manager</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 2 -->
+                    <div class="reveal-item" data-delay="100">
+                        <div class="bg-secondary-custom p-6 rounded-xl shadow-xl border border-custom">
+                            <i data-lucide="quote" class="w-8 h-8 text-accent-main mb-4"></i>
+                            <p class="text-secondary-custom italic mb-4">"Редко встретишь такую проактивность. Он сам предложил улучшения UX/UI, которые мы даже не обсуждали. Результат — идеален."</p>
+                            <div class="flex items-center">
+                                <div class="font-bold text-primary-custom">Елена В.</div>
+                                <div class="text-sm text-secondary-custom ml-2">- CEO Starlight Systems</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Testimonial 3 -->
+                    <div class="reveal-item" data-delay="200">
+                        <div class="bg-secondary-custom p-6 rounded-xl shadow-xl border border-custom">
+                            <i data-lucide="quote" class="w-8 h-8 text-accent-main mb-4"></i>
+                            <p class="text-secondary-custom italic mb-4">"Сайт работает невероятно быстро, а код легко читается. Рекомендую Mizuro всем, кто ценит качество и профессионализм."</p>
+                            <div class="flex items-center">
+                                <div class="font-bold text-primary-custom">Дмитрий Л.</div>
+                                <div class="text-sm text-secondary-custom ml-2">- Частный клиент</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- NEW: Statistics Section -->
+        <section id="stats" class="py-20 bg-secondary-custom border-b border-custom">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div>
+                        <div class="text-4xl md:text-6xl font-bold text-accent-main mb-2" data-count="15">0</div>
+                        <div class="text-secondary-custom">Завершенных проектов</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl md:text-6xl font-bold text-accent-main mb-2" data-count="2">0</div>
+                        <div class="text-secondary-custom">Лет опыта</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl md:text-6xl font-bold text-accent-main mb-2" data-count="10">0</div>
+                        <div class="text-secondary-custom">Довольных клиентов</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl md:text-6xl font-bold text-accent-main mb-2" data-count="5">0</div>
+                        <div class="text-secondary-custom">Технологий</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. CTA / Contact Form -->
+        <section id="contacts" class="py-24 md:py-32 bg-primary-custom">
+            <div class="container mx-auto px-4">
+                <h2 data-reveal class="text-5xl font-extrabold mb-8 text-center text-accent-main transform translate-y-8 opacity-0">
+                    Начнем работу!
+                </h2>
+                <p data-reveal data-delay="100" class="text-xl text-secondary-custom mb-16 text-center max-w-2xl mx-auto transform translate-y-8 opacity-0">
+                    У вас есть сложная задача? Отправьте мне краткое описание, и я свяжусь с вами в течение 24 часов.
+                </p>
+
+                <div class="grid lg:grid-cols-3 gap-12 max-w-5xl mx-auto">
+                    
+                    <!-- Contact Info (Left Column) -->
+                    <div data-reveal data-delay="200" class="lg:col-span-1 space-y-8 p-6 bg-secondary-custom rounded-2xl shadow-xl border border-custom transform translate-y-8 opacity-0">
+                        <h3 class="text-3xl font-bold text-primary-custom border-b border-custom pb-3 mb-4">Мои Каналы</h3>
+                        
+                        <div class="flex items-start space-x-4">
+                            <i data-lucide="message-square" class="w-7 h-7 text-accent-main flex-shrink-0 mt-1"></i>
+                            <div>
+                                <p class="font-semibold text-primary-custom">Telegram (Основной)</p>
+                                <a href="https://t.me/mizuro01" target="_blank" class="text-secondary-custom hover:text-accent-main transition">@mizuro01</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <i data-lucide="mail" class="w-7 h-7 text-accent-main flex-shrink-0 mt-1"></i>
+                            <div>
+                                <p class="font-semibold text-primary-custom">Email</p>
+                                <a href="mailto:email@example.com" class="text-secondary-custom hover:text-accent-main transition">email@example.com</a>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4">
+                            <i data-lucide="github" class="w-7 h-7 text-accent-main flex-shrink-0 mt-1"></i>
+                            <div>
+                                <p class="font-semibold text-primary-custom">GitHub</p>
+                                <a href="https://github.com/mizuroegart" target="_blank" class="text-secondary-custom hover:text-accent-main transition">mizuroegart</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Form (Right Column) -->
+                    <div data-reveal data-delay="300" class="lg:col-span-2 p-8 bg-secondary-custom rounded-2xl shadow-xl border border-custom transform translate-y-8 opacity-0">
+                        <h3 class="text-3xl font-bold text-primary-custom mb-6">Форма Обратной Связи</h3>
+                        
+                        <form id="contact-form" class="space-y-6">
+                            
+                            <!-- Status Message Box -->
+                            <div id="form-status" class="hidden p-4 rounded-lg text-center font-semibold" role="alert"></div>
+
+                            <div>
+                                <label for="name" class="block text-sm font-medium text-primary-custom mb-2">Ваше Имя</label>
+                                <input type="text" id="name" name="name" required class="w-full p-3 rounded-lg bg-primary-custom border border-custom focus:ring-accent-main focus:border-accent-main transition text-primary-custom" placeholder="Иван Петров">
+                            </div>
+                            
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-primary-custom mb-2">Ваш Email</label>
+                                <input type="email" id="email" name="email" required class="w-full p-3 rounded-lg bg-primary-custom border border-custom focus:ring-accent-main focus:border-accent-main transition text-primary-custom" placeholder="you@example.com">
+                            </div>
+                            
+                            <div>
+                                <label for="message" class="block text-sm font-medium text-primary-custom mb-2">Сообщение (Краткое описание задачи)</label>
+                                <textarea id="message" name="message" rows="5" required class="w-full p-3 rounded-lg bg-primary-custom border border-custom focus:ring-accent-main focus:border-accent-main transition text-primary-custom" placeholder="Мне нужен адаптивный лендинг с интеграцией платежной системы..."></textarea>
+                            </div>
+                            
+                            <button type="submit" class="w-full py-3 text-lg font-bold text-gray-900 bg-accent-main rounded-xl shadow-lg hover:bg-purple-400 transition-all duration-300 transform hover:scale-[1.01] btn-pulse">
+                                Отправить Запрос
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-secondary-custom border-t border-custom py-10 transition-colors duration-500">
+        <div class="container mx-auto px-4 text-center">
+            
+            <!-- Quick Links -->
+            <div class="flex justify-center space-x-6 mb-6 text-sm font-medium">
+                <a href="#about" class="text-secondary-custom hover:text-accent-main transition">Обо мне</a>
+                <a href="#projects" class="text-secondary-custom hover:text-accent-main transition">Проекты</a>
+                <a href="#contacts" class="text-secondary-custom hover:text-accent-main transition">Контакты</a>
+            </div>
+
+            <!-- Social Icons -->
+            <div class="flex justify-center space-x-6 mb-6">
+                <a href="https://t.me/mizuro01" target="_blank" class="p-2 rounded-full text-secondary-custom hover:text-accent-main hover:bg-primary-custom transition">
+                    <i data-lucide="send" class="w-6 h-6"></i>
+                </a>
+                <a href="https://github.com/mizuroegart" target="_blank" class="p-2 rounded-full text-secondary-custom hover:text-accent-main hover:bg-primary-custom transition">
+                    <i data-lucide="github" class="w-6 h-6"></i>
+                </a>
+                <a href="mailto:email@example.com" class="p-2 rounded-full text-secondary-custom hover:text-accent-main hover:bg-primary-custom transition">
+                    <i data-lucide="at-sign" class="w-6 h-6"></i>
+                </a>
+            </div>
+
+            <p class="text-secondary-custom text-sm mb-2">© Mizuro aka Mizuki, 2025. Все права защищены.</p>
+            <p class="text-accent-main text-xs font-medium">Код, разработанный с вниманием к деталям и производительности.</p>
+        </div>
+    </footer>
+
+    <!-- Load AOS for fallback animations -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            once: true,
+            mirror: false,
+            disable: 'mobile' // Disable AOS on mobile to use custom JS reveal
+        });
+        
+        // ===================================================================
+        // CORE VARIABLES AND UTILITIES
+        // ===================================================================
+        const themeRoot = document.documentElement;
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
+
+        // ===================================================================
+        // 1. THEME TOGGLE LOGIC (Dark/Light Mode)
+        // ===================================================================
+        const toggleButton = document.getElementById('theme-toggle');
+        const sunIcon = toggleButton.querySelector('.dark-icon');
+        const moonIcon = toggleButton.querySelector('.light-icon');
+        
+        function updateThemeIcons(isLight) {
+            if (isLight) {
+                sunIcon.classList.add('hidden');
+                moonIcon.classList.remove('hidden');
+            } else {
+                sunIcon.classList.remove('hidden');
+                moonIcon.classList.add('hidden');
+            }
+        }
+
+        const storedTheme = localStorage.getItem('theme');
+        const isLightMode = storedTheme === 'light';
+
+        if (isLightMode) {
+            themeRoot.classList.add('light');
+        } else {
+            themeRoot.classList.remove('light');
+        }
+        updateThemeIcons(isLightMode);
+
+        toggleButton.addEventListener('click', () => {
+            const isCurrentlyLight = themeRoot.classList.toggle('light');
+            localStorage.setItem('theme', isCurrentlyLight ? 'light' : 'dark');
+            updateThemeIcons(isCurrentlyLight);
+            
+            // Re-render canvas particles on theme change
+            if (typeof initParticles === 'function') {
+                initParticles();
+            }
+        });
+
+        // ===================================================================
+        // 2. HERO BACKGROUND ANIMATION (Canvas for dots and lines)
+        // Includes Parallax Effect
+        // ===================================================================
+        const canvas = document.getElementById('hero-bg-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const numParticles = 80;
+        const maxDistance = 150;
+        let mouseX = 0;
+        let mouseY = 0;
+
+        function getParticleColor() {
+            // Use CSS variables for theme consistency
+            const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent-main').trim();
+            return accentColor;
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initParticles();
+        }
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.originalX = this.x;
+                this.originalY = this.y;
+                this.size = Math.random() * 1.5 + 1;
+                this.speedX = Math.random() * 0.3 - 0.15;
+                this.speedY = Math.random() * 0.3 - 0.15;
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x > canvas.width + 50 || this.x < -50) this.speedX *= -1;
+                if (this.y > canvas.height + 50 || this.y < -50) this.speedY *= -1;
+                
+                // Simple Parallax Effect based on mouse
+                const parallaxFactor = 0.05;
+                const dx = (mouseX - canvas.width / 2) * parallaxFactor;
+                const dy = (mouseY - canvas.height / 2) * parallaxFactor;
+
+                this.x = this.originalX + dx;
+                this.y = this.originalY + dy;
+            }
+
+            draw() {
+                ctx.fillStyle = getParticleColor();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < numParticles; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            const lineColor = getParticleColor(); 
+
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < maxDistance) {
+                        ctx.beginPath();
+                        // Calculate opacity based on distance
+                        const opacity = 1 - (distance / maxDistance);
+                        ctx.strokeStyle = `rgba(${parseInt(lineColor.slice(1, 3), 16)}, ${parseInt(lineColor.slice(3, 5), 16)}, ${parseInt(lineColor.slice(5, 7), 16)}, ${opacity})`;
+                        ctx.lineWidth = 0.8;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animateParticles() {
+            requestAnimationFrame(animateParticles);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+            }
+            connectParticles();
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        document.addEventListener('mousemove', (e) => {
+            // Only affect Hero section background
+            if (e.target.closest('#hero')) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            }
+        });
+
+        // Initialize canvas
+        resizeCanvas();
+        animateParticles();
+
+
+        // ===================================================================
+        // 3. SCROLL SPY (Active Navigation & Timeline)
+        // ===================================================================
+        const highlightActiveLink = () => {
+            let currentSectionId = 'hero';
+            const timelineItems = document.querySelectorAll('.timeline-item');
+            const timelineContainer = document.querySelector('.timeline-container');
+            const timelineLine = document.querySelector('.timeline-container::after');
+
+            // Find current section
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - (window.innerHeight * 0.4); // Trigger point 40% from top
+                if (window.scrollY >= sectionTop) {
+                    currentSectionId = section.getAttribute('id');
+                }
+            });
+
+            // Highlight nav link
+            navLinks.forEach(link => {
+                link.classList.remove('text-accent-main', 'font-bold', 'text-primary-custom');
+                link.classList.add('text-secondary-custom');
+                
+                if (link.getAttribute('data-section') === currentSectionId) {
+                    link.classList.add('text-accent-main', 'font-bold', 'text-primary-custom');
+                    link.classList.remove('text-secondary-custom');
+                }
+            });
+
+            // Highlight timeline item
+            timelineItems.forEach(item => {
+                const itemRect = item.getBoundingClientRect();
+                const itemCenter = itemRect.top + itemRect.height / 2;
+
+                // Activate if center of item is near center of viewport
+                if (itemCenter > 150 && itemCenter < window.innerHeight - 150) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        };
+        
+        window.addEventListener('scroll', highlightActiveLink);
+        document.addEventListener('DOMContentLoaded', highlightActiveLink);
+
+        // ===================================================================
+        // 4. INTERSECTION OBSERVER (Custom Scroll Reveal)
+        // ===================================================================
+        const revealElements = document.querySelectorAll('[data-reveal]');
+        const revealItemElements = document.querySelectorAll('.reveal-item');
+        
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1 // Start animating when 10% of element is visible
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const delay = el.getAttribute('data-delay') || 0;
+                    
+                    setTimeout(() => {
+                        el.style.transition = `transform 1.0s ease-out ${el.classList.contains('reveal-item') ? '0s' : '0.2s'}, opacity 0.8s ease-out ${el.classList.contains('reveal-item') ? '0s' : '0.2s'}`;
+                        el.style.transform = 'translateY(0)';
+                        el.style.opacity = '1';
+                    }, parseInt(delay));
+                    
+                    observer.unobserve(el);
+                }
+            });
+        }, observerOptions);
+
+        revealElements.forEach(el => observer.observe(el));
+        revealItemElements.forEach(el => observer.observe(el));
+
+        // Initial setup for reveal elements
+        document.querySelectorAll('.reveal-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(50px)';
+        });
+        document.querySelectorAll('[data-reveal]').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(50px)';
+        });
+
+        // ===================================================================
+        // 5. COUNTER ANIMATION (for stats section)
+        // ===================================================================
+        function animateCounters() {
+            const counters = document.querySelectorAll('[data-count]');
+            const speed = 200;
+
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-count');
+                const count = +counter.innerText;
+                
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + (target / speed));
+                    setTimeout(() => animateCounters(), 1);
+                } else {
+                    counter.innerText = target;
+                }
+            });
+        }
+
+        // Observe stats section for counter animation
+        const statsSection = document.getElementById('stats');
+        if (statsSection) {
+            const statsObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateCounters();
+                        statsObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            statsObserver.observe(statsSection);
+        }
+
+        // ===================================================================
+        // 6. PROJECT FILTERS
+        // ===================================================================
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const projectCards = document.querySelectorAll('.project-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active', 'bg-accent-main', 'text-gray-900'));
+                
+                // Add active class to clicked button
+                button.classList.add('active', 'bg-accent-main', 'text-gray-900');
+                
+                const filterValue = button.getAttribute('data-filter');
+                
+                projectCards.forEach(card => {
+                    if (filterValue === 'all' || card.getAttribute('data-category').includes(filterValue)) {
+                        card.style.display = 'block';
+                        setTimeout(() => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                        }, 100);
+                    } else {
+                        card.style.opacity = '0';
+                        card.style.transform = 'translateY(20px)';
+                        setTimeout(() => {
+                            card.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // ===================================================================
+        // 7. LOADING ANIMATION
+        // ===================================================================
+        window.addEventListener('load', () => {
+            const loader = document.getElementById('loading-screen');
+            if (loader) {
+                setTimeout(() => {
+                    loader.style.opacity = '0';
+                    setTimeout(() => {
+                        loader.style.display = 'none';
+                    }, 500);
+                }, 1000);
+            }
+        });
+
+        // ===================================================================
+        // 8. FORM VALIDATION ENHANCEMENT
+        // ===================================================================
+        const contactForm = document.getElementById('contact-form');
+        const formStatus = document.getElementById('form-status');
+        
+        if (contactForm) {
+            const inputs = contactForm.querySelectorAll('input, textarea');
+            
+            inputs.forEach(input => {
+                input.addEventListener('blur', () => {
+                    if (input.value.trim() !== '') {
+                        input.classList.add('valid');
+                    } else {
+                        input.classList.remove('valid');
+                    }
+                });
+            });
+
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Collect form data (for logging/mock purposes only)
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData.entries());
+                
+                // Simple validation check
+                if (!data.name || !data.email || !data.message) {
+                    formStatus.className = 'p-4 rounded-lg text-center font-semibold bg-red-800 text-red-200 block';
+                    formStatus.textContent = 'Пожалуйста, заполните все поля!';
+                    return;
+                }
+
+                // Show loading state
+                formStatus.className = 'p-4 rounded-lg text-center font-semibold bg-blue-800 text-blue-200 block';
+                formStatus.textContent = 'Отправка сообщения...';
+                this.querySelector('button[type="submit"]').disabled = true;
+
+                // Simulate network delay
+                setTimeout(() => {
+                    console.log('Mock Form Submission Data:', data);
+                    
+                    // Display success message
+                    formStatus.className = 'p-4 rounded-lg text-center font-semibold bg-accent-dark text-white block';
+                    formStatus.textContent = `Спасибо, ${data.name}! Ваше сообщение получено. Я свяжусь с вами в ближайшее время.`;
+                    
+                    // Clear the form and re-enable button
+                    this.reset();
+                    this.querySelector('button[type="submit"]').disabled = false;
+                    
+                    // Auto-hide status message after 5 seconds
+                    setTimeout(() => {
+                        formStatus.classList.add('hidden');
+                    }, 5000);
+                    
+                }, 1500); // 1.5 second delay simulation
+            });
+        }
+
+        // ===================================================================
+        // 9. SCROLL TO TOP & MOBILE MENU
+        // ===================================================================
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        const toggleScrollToTop = () => {
+            if (window.scrollY > 500) {
+                scrollToTopBtn.classList.remove('opacity-0', 'translate-y-4');
+                scrollToTopBtn.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                scrollToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+                scrollToTopBtn.classList.add('opacity-0', 'translate-y-4');
+            }
+        };
+
+        window.addEventListener('scroll', toggleScrollToTop);
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // Mobile Menu Toggle
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const icon = mobileMenuButton.querySelector('i');
+            icon.setAttribute('data-lucide', mobileMenu.classList.contains('hidden') ? 'menu' : 'x');
+            lucide.createIcons();
+        });
+        
+        // Close mobile menu on link click
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                const icon = mobileMenuButton.querySelector('i');
+                icon.setAttribute('data-lucide', 'menu');
+                lucide.createIcons();
+            });
+        });
+
+        // ===================================================================
+        // 10. FINAL INITIALIZATION
+        // ===================================================================
+        lucide.createIcons(); // Initialize all Lucide icons
+    </script>
+</body>
+</html>
